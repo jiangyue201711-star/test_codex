@@ -494,4 +494,5 @@ python pipeline/generate_synth_data.py --config pipeline/prd_data_pipeline.json
 
 该实现支持按 PRD 配比在多域任务中采样，并导出可复现数据切分与统计信息。
 另外，matrix 任务已做难度对齐（easy/medium/hard）并强化为与 `/app/eigen.py`、`/app/eval.py` 场景一致的指令文本与评测约束。
+并进一步加入多模板指令改写策略（instruction variants + capability tags），保证能力要求对齐 benchmark，但指令措辞不与 benchmark 原文重复。
 
