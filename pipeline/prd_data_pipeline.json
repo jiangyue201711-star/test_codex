@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "project": "llm-agent-training",
+  "prd": {
+    "objective": "构建跨领域（含矩阵）LLM Agent 训练数据合成流水线",
+    "success_criteria": {
+      "min_executable_rate": 0.999,
+      "min_reference_verifiable_rate": 1.0,
+      "min_metric_computable_rate": 1.0
+    }
+  },
+  "output": {
+    "root": "data/synth_v1",
+    "format": "jsonl",
+    "include_manifest": true
+  },
+  "split": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "domains": [
+    {
+      "name": "matrix",
+      "ratio": 0.3,
+      "task_types": ["dominant_eigenpair"],
+      "params": {"n_min": 2, "n_max": 10, "families": ["diagonal_dominant", "nonsym_scaled"]}
+    },
+    {
+      "name": "string_parsing",
+      "ratio": 0.2,
+      "task_types": ["log_parse"],
+      "params": {"max_lines": 200, "dirty_rate": 0.1}
+    },
+    {
+      "name": "graph",
+      "ratio": 0.15,
+      "task_types": ["shortest_path"],
+      "params": {"n_min": 20, "n_max": 80, "density": [0.05, 0.2]}
+    },
+    {
+      "name": "db_retrieval",
+      "ratio": 0.15,
+      "task_types": ["query_filter_aggregate"],
+      "params": {"rows": [1000, 5000], "null_rate": 0.05}
+    },
+    {
+      "name": "system_concurrency",
+      "ratio": 0.1,
+      "task_types": ["scheduler_sim"],
+      "params": {"jobs": [50, 300], "fail_rate": 0.03}
+    },
+    {
+      "name": "api_code",
+      "ratio": 0.1,
+      "task_types": ["api_orchestration", "bugfix_small"],
+      "params": {"timeout_ms": [100, 1200]}
+    }
+  ],
+  "generation": {
+    "total_samples": 1000,
+    "random_seed": 42
+  }
+}

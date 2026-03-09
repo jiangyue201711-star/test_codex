@@ -466,3 +466,28 @@ def benchmark(dataset, solver, baseline):
 - api/code-repair: 10%
 
 这样可避免训练目标被“单一矩阵优化”绑死，同时保留原任务作为高价值数值推理子集。
+
+---
+
+## 13. PRD 落地实现（可直接运行）
+
+本仓库新增了可执行的数据合成 pipeline：
+
+- 配置文件：`pipeline/prd_data_pipeline.json`
+- 生成脚本：`pipeline/generate_synth_data.py`
+
+运行方式：
+
+```bash
+python pipeline/generate_synth_data.py --config pipeline/prd_data_pipeline.json
+```
+
+输出产物（默认）：
+
+- `data/synth_v1/train.jsonl`
+- `data/synth_v1/val.jsonl`
+- `data/synth_v1/test.jsonl`
+- `data/synth_v1/manifest.json`
+- `data/synth_v1/domain_stats.csv`
+
+该实现支持按 PRD 配比在多域任务中采样，并导出可复现数据切分与统计信息。
