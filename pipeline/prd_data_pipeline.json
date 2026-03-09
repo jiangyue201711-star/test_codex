@@ -1,8 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "project": "llm-agent-training",
   "prd": {
-    "objective": "构建跨领域（含矩阵）LLM Agent 训练数据合成流水线",
+    "objective": "构建跨领域（含矩阵）LLM Agent 训练数据合成流水线，并重点对齐dominant eigenpair实现优化任务",
     "success_criteria": {
       "min_executable_rate": 0.999,
       "min_reference_verifiable_rate": 1.0,
@@ -10,7 +10,7 @@
     }
   },
   "output": {
-    "root": "data/synth_v1",
+    "root": "data/synth_v2",
     "format": "jsonl",
     "include_manifest": true
   },
@@ -22,43 +22,59 @@
   "domains": [
     {
       "name": "matrix",
-      "ratio": 0.3,
+      "ratio": 0.55,
       "task_types": ["dominant_eigenpair"],
-      "params": {"n_min": 2, "n_max": 10, "families": ["diagonal_dominant", "nonsym_scaled"]}
+      "params": {
+        "families": ["diagonal_dominant", "nonsym_scaled", "near_defective", "rotation_block_mix"],
+        "difficulty": {
+          "levels": ["easy", "medium", "hard"],
+          "weights": [0.35, 0.40, 0.25],
+          "n_range": {
+            "easy": [2, 4],
+            "medium": [5, 7],
+            "hard": [8, 10]
+          },
+          "families": {
+            "easy": ["diagonal_dominant"],
+            "medium": ["diagonal_dominant", "nonsym_scaled", "rotation_block_mix"],
+            "hard": ["nonsym_scaled", "near_defective", "rotation_block_mix"]
+          }
+        }
+      }
     },
     {
       "name": "string_parsing",
-      "ratio": 0.2,
+      "ratio": 0.12,
       "task_types": ["log_parse"],
       "params": {"max_lines": 200, "dirty_rate": 0.1}
     },
     {
       "name": "graph",
-      "ratio": 0.15,
+      "ratio": 0.1,
       "task_types": ["shortest_path"],
       "params": {"n_min": 20, "n_max": 80, "density": [0.05, 0.2]}
     },
     {
       "name": "db_retrieval",
-      "ratio": 0.15,
+      "ratio": 0.1,
       "task_types": ["query_filter_aggregate"],
       "params": {"rows": [1000, 5000], "null_rate": 0.05}
     },
     {
       "name": "system_concurrency",
-      "ratio": 0.1,
+      "ratio": 0.07,
       "task_types": ["scheduler_sim"],
       "params": {"jobs": [50, 300], "fail_rate": 0.03}
     },
     {
       "name": "api_code",
-      "ratio": 0.1,
+      "ratio": 0.06,
       "task_types": ["api_orchestration", "bugfix_small"],
       "params": {"timeout_ms": [100, 1200]}
     }
   ],
   "generation": {
-    "total_samples": 1000,
+    "total_samples": 1200,
     "random_seed": 42
   }
 }

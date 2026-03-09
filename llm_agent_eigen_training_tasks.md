@@ -484,10 +484,14 @@ python pipeline/generate_synth_data.py --config pipeline/prd_data_pipeline.json
 
 输出产物（默认）：
 
-- `data/synth_v1/train.jsonl`
-- `data/synth_v1/val.jsonl`
-- `data/synth_v1/test.jsonl`
-- `data/synth_v1/manifest.json`
-- `data/synth_v1/domain_stats.csv`
+- `data/synth_v2/train.jsonl`
+- `data/synth_v2/val.jsonl`
+- `data/synth_v2/test.jsonl`
+- `data/synth_v2/manifest.json`
+- `data/synth_v2/domain_stats.csv`
+
+- `data/synth_v2/matrix_difficulty_stats.csv`
 
 该实现支持按 PRD 配比在多域任务中采样，并导出可复现数据切分与统计信息。
+另外，matrix 任务已做难度对齐（easy/medium/hard）并强化为与 `/app/eigen.py`、`/app/eval.py` 场景一致的指令文本与评测约束。
+
